@@ -14,7 +14,8 @@
   <pre id="output"></pre>
   <script>
 
-    var str = [0, 0]
+    var str1 = []
+    var str2 = []
     var text
 
     async function loadFile(file) 
@@ -23,6 +24,29 @@
       document.getElementById('output').textContent = text;
     }
 
+      var chg = function()
+      {
+        var i = 0;
+        var text2 = text.split("")
+        while (i !== text.split("").length)
+        {
+          if (text[i] === '#')
+          text2[i] = 0;
+          if (text[i] === 'O')
+          text2[i] = 1;
+          if (text[i] === 'o')
+          text2[i] = 2;
+          if (text[i] === 'P')
+          text2[i] = 3;
+          if (text[i] === '=')
+          text2[i] = 4;
+          i++;
+        }
+        text = text2.join("")
+        return text;
+      }
+
+
     var cal = function () 
     {
       var k = 0;                                  // k는 text위치
@@ -30,22 +54,27 @@
       while (true)    
       {
         var j = 0;                                // j는 y축 좌표
-        console.log("===i는" + i + "입니다.===");
         while (text[k] !== '\n')                  // 탐색위치가 각줄의 마지막 개행문자에 도달할떄까지
         {
-          str[i, j] = text[k]
-          console.log("j는" + j + "입니다.");
-          console.log(str[i,j])
+          str2[j] = text.split("\r\n")[j];
           j++;
           k++;
-          if (k === text.lastIndexOf('#'))        // text탐색위치가 마지막 #에 도달하면 종료
+          if (k === text.lastIndexOf('0'))        // text탐색위치가 마지막 #에 도달하면 종료
+          {
             return;
+          }
         }
+        str1[i] = str2[i].split("");
         i++;
         k++;
       }
     }
 
+    var main = function()
+    {
+      chg()
+      cal()
+    }
   </script>
 </body>
 
