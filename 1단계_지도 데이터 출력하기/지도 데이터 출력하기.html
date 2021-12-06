@@ -1,50 +1,52 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>1단계: 지도 데이터 출력하기</title>
-  </head>
-  <body>
-    <input type="file" onchange="loadFile(this.files[0])">
-    <br>
-    <pre id="output"></pre>
-    <script>
-        var str = [,]
-        var text
 
-        async function loadFile(file) 
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>1단계: 지도 데이터 출력하기</title>
+</head>
+
+<body>
+  <input type="file" onchange="loadFile(this.files[0])">
+  <br>
+  <pre id="output"></pre>
+  <script>
+
+    var str = [0, 0]
+    var text
+
+    async function loadFile(file) 
+    {
+      text = await file.text();
+      document.getElementById('output').textContent = text;
+    }
+
+    var cal = function () 
+    {
+      var k = 0;                                  // k는 text위치
+      var i = 0;                                  // i는 x축 좌표
+      while (true)    
+      {
+        var j = 0;                                // j는 y축 좌표
+        console.log("===i는" + i + "입니다.===");
+        while (text[k] !== '\n')                  // 탐색위치가 각줄의 마지막 개행문자에 도달할떄까지
         {
-            text = await file.text();
-            document.getElementById('output').textContent = text;
+          str[i, j] = text[k]
+          console.log("j는" + j + "입니다.");
+          console.log(str[i,j])
+          j++;
+          k++;
+          if (k === text.lastIndexOf('#'))        // text탐색위치가 마지막 #에 도달하면 종료
+            return;
         }
+        i++;
+        k++;
+      }
+    }
 
-        var cal = function()
-        {
-            var i = 0;                  // i는 y축 좌표
-            var k = 0;                  // k는 text위치
-            while(text[k] !== "=")      // text탐색위치가 ====에 도달할떄까지
-            {
-                var j = 0;              // j는 x축 좌표
-                while(text[k] !== "\r\n")
-                {
-                    str[i,j] = text[i]
-                    j++;
-                    k++;
-                }
-                i++;
-                k++;
-            }
-        }
+  </script>
+</body>
 
-        let animals = [
-  ["고양이", 1],
-  ["강아지", 2],
-  ["개구리", 3],
-];
-
-
-    </script>
-  </body>
 </html>
