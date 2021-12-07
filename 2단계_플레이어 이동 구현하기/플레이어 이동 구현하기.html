@@ -13,9 +13,9 @@
     <div id="btns">
         <button onclick="start(event)">시작</button>
     </div>
-    <div id = "test2">
-        <input id = 'input1' type = 'text'>
-        <button id = 'check' onclick="stage(event)">확인</button>
+    <div id="test2">
+        <input id='input1' type='text'>
+        <button id='check' onclick="stage(event)">확인</button>
     </div>
     <pre id="output1"></pre>
     <pre id="output2"></pre>
@@ -24,52 +24,70 @@
 
         var mv
 
-        var start = function (event)
-        {
+        var start = function (event) {
             main()
         }
 
-        var move = function()
-        {
+        var move = function () {
             var i = 0;
-            var trans                      //임시저장
-            var lc                         // 좌표
+            var tmp                             //임시저장
 
-            while (mv[i] < mv.length)
-            {
-                if (mv[i] === "w")
-                {
-                   lc = plc(map2).split(",");
-                   trans = str2[lc[0] * 1][lc[1] * 1];                              //trans에 플레이어 위치를 임시저장
-                   str2[lc[0] * 1][lc[1] * 1] = str2[(lc[0] * 1) - 1][lc[1] * 1];   //플레이어 위치에 위쪽좌표 문자열 저장
-                   str2[(lc[0] * 1) - 1][lc[1] * 1] = trans;                        //위쪽좌표에 플레이어 저장
+            var lc = plc(map[1]).split(",");    //플레이어 좌표
+            lc[0] = Number(lc[0])
+            lc[1] = Number(lc[1])
+
+            var a = 0;                          //상,하
+            var b = 0;                          //좌,우
+
+            while (i < mv.length) {
+                if (mv[i] === "w") {
+                    a = -1
+                    b = 0
                 }
+                if (mv[i] === "s") {
+                    a = 1
+                    b = 0
+                }
+                if (mv[i] === "a") {
+                    a = 0
+                    b = -1
+                }
+                if (mv[i] === "d") {
+                    a = 0
+                    b = 1
+                }
+
+                if ((mv[i] === "w" || "s" || "a" || "d") && (str[1][lc[0] + a][lc[1] + b] === ' ')) {                                       //빈공간일때 작동
+                    lc
+                    tmp = str[1][lc[0]][lc[1]]
+                    str[1][lc[0]][lc[1]] = str[1][lc[0] + a][lc[1] + b]
+                    str[1][lc[0] + a][lc[1] + b] = tmp
+                    console.log("수행했습니다!")
+                }
+                else if ((mv[i] === "w" || "s" || "a" || "d") && (str[1][lc[0] + a][lc[1] + b] !== ' ')) {                                     //빈공간아닐때
+                    lc
+                    console.log("(경고!) 해당 명령을 수행할 수 없습니다!")
+                }
+                i++
             }
         }
 
-        str2[lc[0] * 1][lc[1] * 1].splice(0, 1, str2[(lc[0] * 1) - 1][lc[1] * 1])
-
-
-        var readInput = function()
-        {
+        var readInput = function () {
             var input = document.getElementById('input1');
-            console.log(input.value);
             mv = (input.value)
             move()
         }
 
         var check = document.getElementById('check');
         check.onclick = readInput;
-        
 
-        var stage = function (event)
-        {
+
+        var stage = function (event) {
             var stn = []
             var i = 0;
 
             stn = text.match(/Stage/g)
-            while (i < text.match(/Stage/g).length)
-            {
+            while (i < text.match(/Stage/g).length) {
                 stn[i] = stn[i] + " " + i;
                 i++;
             }

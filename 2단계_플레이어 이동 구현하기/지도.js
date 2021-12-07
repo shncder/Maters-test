@@ -1,8 +1,6 @@
 var text
-var map1
-var map2
-var str1
-var str2
+var map = []
+var str = []
 
 async function loadFile(file)   // 텍스트파일 불러오기
 {
@@ -11,14 +9,29 @@ async function loadFile(file)   // 텍스트파일 불러오기
 
 var cal = function ()                                                              //스테이지 구분 및 2차원 배열저장
 {
-    map1 = text.slice(0, text.indexOf("S", (text.indexOf("S") + 1)));                 // 시작 S를 제외한 다음 S까지
-    map2 = text.slice(text.indexOf("S", (text.indexOf("S") + 1)), text.length);       // 시작 S를 제외한 다음 S부터
+    var k = 0                                                                            //text 파일의 탐색중인 위치
 
-    str1 = map1.split("\r\n");
-    str2 = map2.split("\r\n");
+    for (var i = 0; i < text.match(/Stage/g).length; i++)                                //스테이지 개수만큼 반복
+    {
+        map[i] = text.slice(k, text.indexOf("S", (text.indexOf("S") + 1)));                 // 시작 S를 제외한 다음 S까지
 
-    str1.shift()
-    str2.shift()
+        if (k === text.lastIndexOf("S")) 
+        {
+            map[i] = text.slice(text.indexOf("S", (text.indexOf("S") + 1)), text.length);   // 마지막S부터 마지막까지
+        }
+        k = text.indexOf("S", (text.indexOf("S") + 1))
+
+        str[i] = map[i].split("\r\n");                                                        // 지도만 추출
+        str[i].shift()
+        for (var j = 0; j < str[i].length; j++) 
+        {
+            str[i][j] = str[i][j].split("")
+            if (str[i][j].length === 0)                                          //빈배열 제거
+            {
+                str[i].pop()
+            }
+        }
+    }
 }
 
 var len1 = function (target)                //가로길이
@@ -90,12 +103,12 @@ var stage1 = function ()                              //출력함수
         return target;
     }
 
-    document.getElementById('output1').textContent = result(map1) +
-        "\n\n가로크기: " + len1(map1) +
-        "\n세로크기: " + len2(map1) +
-        "\n구멍의 수: " + qnt(map1, "O") +
-        "\n공의 수: " + qnt(map1, "o") +
-        "\n플레이어 위치: " + plc(map1);
+    document.getElementById('output1').textContent = result(map[0]) +
+        "\n\n가로크기: " + len1(map[0]) +
+        "\n세로크기: " + len2(map[0]) +
+        "\n구멍의 수: " + qnt((map[0]), "O") +
+        "\n공의 수: " + qnt((map[0]), "o") +
+        "\n플레이어 위치: " + plc(map[0]);
     document.getElementById('output2') = test2;
 }
 
@@ -108,12 +121,12 @@ var stage2 = function ()                              //출력함수
         return target;
     }
 
-    document.getElementById('output1').textContent = result(map2) +
-        "\n\n가로크기: " + len1(map2) +
-        "\n세로크기: " + len2(map2) +
-        "\n구멍의 수: " + qnt(map2, "O") +
-        "\n공의 수: " + qnt(map2, "o") +
-        "\n플레이어 위치: " + plc(map2)
+    document.getElementById('output1').textContent = result(map[1]) +
+        "\n\n가로크기: " + len1(map[1]) +
+        "\n세로크기: " + len2(map[1]) +
+        "\n구멍의 수: " + qnt(map[1], "O") +
+        "\n공의 수: " + qnt(map[1], "o") +
+        "\n플레이어 위치: " + plc(map[1])
 }
 
 
