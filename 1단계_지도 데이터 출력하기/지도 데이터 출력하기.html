@@ -9,22 +9,21 @@
 </head>
 
 <body>
-  <input type="file" onchange="loadFile(this.files[0])">
+  <input type="file" onchange="loadFile(this.files[0])"> 
   <br>
   <pre id="output1"></pre>
   <pre id="output2"></pre>
   <script>
 
-    var str1 = []
-    var str2 = []
+    var str1
+    var str2
     var text
-    var plocate = []
     var map1
     var map2 
 
-    async function loadFile(file) 
+    async function loadFile(file)   // 텍스트파일 불러오기
     {
-      text = await file.text();
+      text = await file.text();       
     }
 
       // var chg = function()
@@ -50,25 +49,13 @@
       // }
 
 
-    var cal = function () 
+      var cal = function ()                                                              //스테이지 구분 및 2차원 배열저장
     {
-      var k = 0;                                  // k는 text위치
-      var i = 0;                                  // i는 x축 좌표
-      while (true)    
-      {
-        var j = 0;                                // j는 y축 좌표
-        while (text[k] !== '\n')                  // 탐색위치가 각줄의 마지막 개행문자에 도달할떄까지
-        {
-          str2[j] = text.split("\r\n")[j];
-          j++;
-          k++;
-          if (k === text.lastIndexOf('#'))        // text탐색위치가 마지막 #에 도달하면 종료
-            return;
-        }
-        str1[i] = str2[i].split("");
-        i++;
-        k++;
-      }
+      map1 = text.slice(0,text.indexOf("S", (text.indexOf("S") + 1)))                  // 시작 S를 제외한 다음 S까지
+      map2 = text.slice(text.indexOf("S", (text.indexOf("S") + 1)), text.length)       // 시작 S를 제외한 다음 S부터
+
+      str1 = map1.split("\r\n")
+      str2 = map2.split("\r\n")
     }
 
     var len1 = function(target)                //가로길이
@@ -136,18 +123,22 @@
       }
     }
 
-    var prt = function()
+    var prt = function()                              //출력함수
     {
-      map1 = text.slice(0,text.indexOf('='))
-      map1 = map1
-      map2 = text.slice(text.lastIndexOf("S"), text.length)
-      document.getElementById('output1').textContent = map1 + 
+      var result = function(target)                   //== 구분기호 제거               
+      {
+        if (target.indexOf("=") !== -1)
+        target = target.slice(0, target.indexOf("="))                   
+        return target;
+      }
+
+      document.getElementById('output1').textContent = result(map1) + 
       "\n가로크기: " + len1(map1) + 
       "\n세로크기: " + len2(map1) +
       "\n구멍의 수: " + qnt(map1, "O") +
       "\n공의 수: " + qnt(map1, "o") +
       "\n플레이어 위치: " + plc(map1)
-      document.getElementById('output2').textContent = map2 +
+      document.getElementById('output2').textContent = result(map2) +
       "\n\n가로크기: " + len1(map2) + 
       "\n세로크기: " + len2(map2) +
       "\n구멍의 수: " + qnt(map2, "O") +
@@ -155,9 +146,8 @@
       "\n플레이어 위치: " + plc(map2)
     }
 
-    var main = function()
+    var main = function()                                 //메인함수
     {
-      //chg()
       cal()
       prt()
     }
