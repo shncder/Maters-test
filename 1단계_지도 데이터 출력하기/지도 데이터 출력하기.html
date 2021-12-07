@@ -11,40 +11,43 @@
 <body>
   <input type="file" onchange="loadFile(this.files[0])">
   <br>
-  <pre id="output"></pre>
+  <pre id="output1"></pre>
+  <pre id="output2"></pre>
   <script>
 
     var str1 = []
     var str2 = []
     var text
+    var plocate = []
+    var map1
+    var map2 
 
     async function loadFile(file) 
     {
       text = await file.text();
-      document.getElementById('output').textContent = text;
     }
 
-      var chg = function()
-      {
-        var i = 0;
-        var text2 = text.split("")
-        while (i !== text.split("").length)
-        {
-          if (text[i] === '#')
-          text2[i] = 0;
-          if (text[i] === 'O')
-          text2[i] = 1;
-          if (text[i] === 'o')
-          text2[i] = 2;
-          if (text[i] === 'P')
-          text2[i] = 3;
-          if (text[i] === '=')
-          text2[i] = 4;
-          i++;
-        }
-        text = text2.join("")
-        return text;
-      }
+      // var chg = function()
+      // {
+      //   var i = 0;
+      //   var text2 = text.split("")
+      //   while (i !== text.split("").length)
+      //   {
+      //     if (text[i] === '#')
+      //     text2[i] = 0;
+      //     if (text[i] === 'O')
+      //     text2[i] = 1;
+      //     if (text[i] === 'o')
+      //     text2[i] = 2;
+      //     if (text[i] === 'P')
+      //     text2[i] = 3;
+      //     if (text[i] === '=')
+      //     text2[i] = 4;
+      //     i++;
+      //   }
+      //   text = text2.join("")
+      //   return text;
+      // }
 
 
     var cal = function () 
@@ -59,10 +62,8 @@
           str2[j] = text.split("\r\n")[j];
           j++;
           k++;
-          if (k === text.lastIndexOf('0'))        // text탐색위치가 마지막 #에 도달하면 종료
-          {
+          if (k === text.lastIndexOf('#'))        // text탐색위치가 마지막 #에 도달하면 종료
             return;
-          }
         }
         str1[i] = str2[i].split("");
         i++;
@@ -70,10 +71,95 @@
       }
     }
 
+    var len1 = function(target)                //가로길이
+    {
+      var maplen = target.split("\r\n")
+      var maplen2 = [];
+
+      var i = 1;
+      var j = 0;
+      while (maplen[i] !== undefined)
+      {
+        maplen2[j] = maplen[i].length
+        i++;
+        j++;
+      }
+      return (Math.max.apply(null, maplen2));
+    }
+
+
+    var len2 = function(target)                     //세로길이
+    {
+      var maplen = target.split("\r\n")
+      if (maplen[maplen.length - 1] === '')
+      {
+        maplen.pop()
+      }
+      return (maplen.length - 1)
+    }
+
+
+    var qnt = function(target,string)
+    {
+      var count = 0;
+      var halen = target
+
+      while (halen.indexOf(string) !== -1)
+      {
+          halen = halen.replace(string, "X")
+          count++;
+      }
+      return count;
+    }
+
+    var plc = function(target)                     //플레이어 위치
+    {
+      var locate = target.split("\r\n")
+
+      if (locate[locate.length - 1] === '')
+      {
+        locate.pop()
+      }
+      if (locate[0][0] === 'S')
+      {
+        locate.shift()
+      }
+      for (var i = 0; i < locate.length; i++)
+      {
+        for(var j = 0; j <locate[i].length; j++)
+        {
+          if (locate[i][j] === "P")
+          {
+            return (i + ", " + j)
+          }
+        }
+      }
+    }
+
+    var prt = function()
+    {
+      map1 = text.slice(0,text.indexOf('='))
+      map1 = map1
+      map2 = text.slice(text.lastIndexOf("S"), text.length)
+      document.getElementById('output1').textContent = map1 + 
+      "\n가로크기: " + len1(map1) + 
+      "\n세로크기: " + len2(map1) +
+      "\n구멍의 수: " + qnt(map1, "O") +
+      "\n공의 수: " + qnt(map1, "o") +
+      "\n플레이어 위치: " + plc(map1)
+      document.getElementById('output2').textContent = map2 +
+      "\n\n가로크기: " + len1(map2) + 
+      "\n세로크기: " + len2(map2) +
+      "\n구멍의 수: " + qnt(map2, "O") +
+      "\n공의 수: " + qnt(map2, "o") +
+      "\n플레이어 위치: " + plc(map2)
+    }
+
     var main = function()
     {
-      chg()
+      //chg()
       cal()
+      prt()
     }
   </script>
 </body>
