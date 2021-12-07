@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2단계: 플레이어 이동 구현</title>
+</head>
+
+<body>
+    <input type="file" onchange="loadFile(this.files[0])">
+    <div id="btns">
+        <button onclick="start(event)">시작</button>
+    </div>
+    <div id = "test2">
+        <input id = 'input1' type = 'text'>
+        <button id = 'check' onclick="stage(event)">확인</button>
+    </div>
+    <pre id="output1"></pre>
+    <pre id="output2"></pre>
+    <script src="지도.js"></script>
+    <script>
+
+        var mv
+
+        var start = function (event)
+        {
+            main()
+        }
+
+        var move = function()
+        {
+            var i = 0;
+            var trans                      //임시저장
+            var lc                         // 좌표
+
+            while (mv[i] < mv.length)
+            {
+                if (mv[i] === "w")
+                {
+                   lc = plc(map2).split(",");
+                   trans = str2[lc[0] * 1][lc[1] * 1];                              //trans에 플레이어 위치를 임시저장
+                   str2[lc[0] * 1][lc[1] * 1] = str2[(lc[0] * 1) - 1][lc[1] * 1];   //플레이어 위치에 위쪽좌표 문자열 저장
+                   str2[(lc[0] * 1) - 1][lc[1] * 1] = trans;                        //위쪽좌표에 플레이어 저장
+                }
+            }
+        }
+
+        str2[lc[0] * 1][lc[1] * 1].splice(0, 1, str2[(lc[0] * 1) - 1][lc[1] * 1])
+
+
+        var readInput = function()
+        {
+            var input = document.getElementById('input1');
+            console.log(input.value);
+            mv = (input.value)
+            move()
+        }
+
+        var check = document.getElementById('check');
+        check.onclick = readInput;
+        
+
+        var stage = function (event)
+        {
+            var stn = []
+            var i = 0;
+
+            stn = text.match(/Stage/g)
+            while (i < text.match(/Stage/g).length)
+            {
+                stn[i] = stn[i] + " " + i;
+                i++;
+            }
+            return stn
+        }
+    </script>
+</body>
+
+</html>
