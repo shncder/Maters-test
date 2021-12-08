@@ -32,9 +32,9 @@
             var i = 0;
             var tmp                             //임시저장
 
-            var lc = plc(map[1]).split(",");    //플레이어 좌표
-            lc[0] = Number(lc[0])
-            lc[1] = Number(lc[1])
+            var lc = plc(str[1].join("&").replace(/,/g, "")).split(",");    //플레이어 좌표
+            lc[0] = Number(lc[0])                                           //y좌표
+            lc[1] = Number(lc[1])                                           //x좌표
 
             var a = 0;                          //상,하
             var b = 0;                          //좌,우
@@ -56,17 +56,24 @@
                     a = 0
                     b = 1
                 }
+                if (mv[i] === "q") {
+                    console.log("프로그램을 종료합니다")
+                    break;
+                }
 
                 if ((mv[i] === "w" || "s" || "a" || "d") && (str[1][lc[0] + a][lc[1] + b] === ' ')) {                                       //빈공간일때 작동
-                    lc
                     tmp = str[1][lc[0]][lc[1]]
                     str[1][lc[0]][lc[1]] = str[1][lc[0] + a][lc[1] + b]
                     str[1][lc[0] + a][lc[1] + b] = tmp
+                    lc[0] = lc[0] + a
+                    lc[1] = lc[1] + b
                     console.log("수행했습니다!")
+                    console.log(lc)
                 }
                 else if ((mv[i] === "w" || "s" || "a" || "d") && (str[1][lc[0] + a][lc[1] + b] !== ' ')) {                                     //빈공간아닐때
-                    lc
                     console.log("(경고!) 해당 명령을 수행할 수 없습니다!")
+                    console.log(lc)
+                    lc
                 }
                 i++
             }

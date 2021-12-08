@@ -21,8 +21,8 @@ var cal = function ()                                                           
         }
         k = text.indexOf("S", (text.indexOf("S") + 1))
 
-        str[i] = map[i].split("\r\n");                                                        // 지도만 추출
-        str[i].shift()
+        str[i] = map[i].split("\r\n"); 
+        str[i].shift()                                                                     // 지도만 추출
         for (var j = 0; j < str[i].length; j++) 
         {
             str[i][j] = str[i][j].split("")
@@ -77,14 +77,8 @@ var qnt = function (target, string) {
 
 var plc = function (target)                     //플레이어 위치
 {
-    var locate = target.split("\r\n")
+    var locate = target.split("&")
 
-    if (locate[locate.length - 1] === '') {
-        locate.pop()
-    }
-    if (locate[0][0] === 'S') {
-        locate.shift()
-    }
     for (var i = 0; i < locate.length; i++) {
         for (var j = 0; j < locate[i].length; j++) {
             if (locate[i][j] === "P") {
@@ -126,7 +120,7 @@ var stage2 = function ()                              //출력함수
         "\n세로크기: " + len2(map[1]) +
         "\n구멍의 수: " + qnt(map[1], "O") +
         "\n공의 수: " + qnt(map[1], "o") +
-        "\n플레이어 위치: " + plc(map[1])
+        "\n플레이어 위치: " + plc(str[1].join("&").replace(/,/g, ""))
 }
 
 
